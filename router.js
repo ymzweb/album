@@ -7,7 +7,7 @@
     module.exports = function(req, res) {
 
         const urlObj = url.parse(req.url, true)
-            // console.log(urlObj)
+            console.log(urlObj)
         const pathname = urlObj.pathname
         const query = urlObj.query
 
@@ -27,6 +27,8 @@
         } else if (pathname === '/getAlbums') {
             handlers.getAlbums(req, res)
 
+        } else if (pathname === '/add') {
+            handlers.addAlbum(req, res, urlObj)
         } else {
             handlers.handle404(req, res)
         }

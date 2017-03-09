@@ -43,6 +43,46 @@ exports.getAlbums = (req, res) => {
     })
 }
 
+//根据提交的相册名称，创建相册目录(文件夹)
+exports.addAlbum = function (req, res, urlObj) {
+
+    const albumName = urlObj.query.albumName
+
+    if (albumName.trim().length === 0) {
+        res.writeHead(200, {
+            'Content-Type': 'text/plain; charset=utf-8'
+        })
+        res.end('请输入完整相册名')
+    }
+
+    fs.readdir(config.uploadDir, (err, files) => {
+        if (err) {
+            throw err
+        }
+
+        files.forEach(item => {
+            if (item === urlObj.query.albumName) {
+                return res.end('该相册名称已存在')
+            }   
+        })
+        fs.mkdir(path.join(config.uploadDir, albumName), (err) => {
+            if (err) {
+                throw err
+            }
+            console.log('相册创建成功')
+            res.writeHead('302', {
+                'Location': '/'
+            })
+            res.end()
+        })
+        
+    })
+
+    
+    
+}
+
+
 exports.handle404 = (req, res) => {
     res.end('404 NOT Found.')
 }
